@@ -5,35 +5,47 @@
 <% hide_actions ||= false %>
 <% hide_back ||= false %>
 
-<% pagy ||= nil %>
-<% pagy, projects = pagy(projects, page_param: :projects_page) unless pagy %>
-
 <%= action_model_select_controller do %>
   <% cable_ready_updates_for context, collection do %>
-    <%= render 'account/shared/box', pagy: pagy do |box| %>
+    <%= render 'account/shared/box' do |box| %>
       <% box.title t(".contexts.#{context.class.name.underscore}.header") %>
       <% box.description do %>
         <%= t(".contexts.#{context.class.name.underscore}.description#{"_empty" unless projects.any?}") %>
         <%= render "shared/limits/index", model: projects.model %>
+        <%= render "account/filter/search_form",
+                   collection: projects,
+                   url: account_team_projects_path(@team),
+                   turbo_frame: "projects",
+                   attributes: { name: :text, description: :text } %>
       <% end %>
 
       <% box.table do %>
-        <% if projects.any? %>
-          <table class="table">
-            <thead>
-              <tr>
-                <%= render "shared/tables/select_all" %>
-                <th><%= t('.fields.name.heading') %></th>
-                <th><%= t('.fields.description.heading') %></th>
-                <%# 🚅 super scaffolding will insert new field headers above this line. %>
-                <th><%= t('.fields.created_at.heading') %></th>
-                <th class="text-right"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <%= render partial: 'account/projects/project', collection: projects %>
-            </tbody>
-          </table>
+        <%= turbo_frame_tag "projects" do %>
+          <% pagy, projects = pagy(projects, page_param: :projects_page) unless pagy %>
+
+          <% if projects.any? %>
+            <table class="table">
+              <thead>
+                <tr>
+                  <%= render "shared/tables/select_all" %>
+                  <th><%= t('.fields.name.heading') %></th>
+                  <th><%= t('.fields.description.heading') %></th>
+                  <%# 🚅 super scaffolding will insert new field headers above this line. %>
+                  <th><%= t('.fields.created_at.heading') %></th>
+                  <th class="text-right"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= render partial: 'account/projects/project', collection: projects %>
+              </tbody>
+            </table>
+          <% end %>
+
+          <% if defined?(pagy) && pagy %>
+            <div class="m-4 flex justify-end">
+              <%== pagy_nav(pagy) if pagy.pages > 1 %>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
 

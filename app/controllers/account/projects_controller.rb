@@ -68,4 +68,8 @@ class Account::ProjectsController < Account::ApplicationController
   def process_params(strong_params)
     # 🚅 super scaffolding will insert processing for new fields above this line.
   end
+
+  def available_filter_attributes
+    %w[name description]
+  end
 end
