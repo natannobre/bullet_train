@@ -1,3 +1,4 @@
+docker: docker compose up
 web: bin/rails server -p 3000
 worker: bundle exec sidekiq -t 25
 js: THEME="light" yarn build --watch

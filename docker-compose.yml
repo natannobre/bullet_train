@@ -1,0 +1,17 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./tmp/redis_data:/data
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./tmp/postgres_data:/var/lib/postgresql/data

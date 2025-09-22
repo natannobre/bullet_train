@@ -262,3 +262,10 @@ gem "active_hash"
 # that you run into a merge conflict in the future.
 
 # 🚅 super scaffolding will insert new oauth providers above this line.
+
+group :development, :test do
+  # A Ruby gem to load environment variables from `.env`. [https://github.com/bkeepers/dotenv]
+  gem "dotenv-rails", "~> 3.1", ">= 3.1.8"
+
+  gem "overmind", "~> 2.5"
+end

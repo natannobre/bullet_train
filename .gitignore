@@ -94,3 +94,6 @@ erd.pdf
 CLAUDE.md
 
 # 🚅 add your files to ignore here.
+
+.env
+.tool-versions
